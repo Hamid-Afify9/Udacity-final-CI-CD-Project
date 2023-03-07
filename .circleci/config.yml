@@ -368,7 +368,7 @@ jobs:
 #           command: |
 #             # your code here
 #             export OldWorkflowID="the id here"
-#             export STACKS=[] #put the list of stacks here
+#             export STACKS=[] uput the list of stacks here
 #       - run:
 #           name: Remove old stacks and files
 #           command: |
@@ -383,3 +383,7 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
