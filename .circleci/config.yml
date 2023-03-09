@@ -167,7 +167,7 @@ jobs:
     steps:
       - checkout
       - install_awscli
-      - install_ansible
+     #- install_ansible
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -196,8 +196,8 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt
-      - destroy-environment
+           - project/.circleci/ansible/inventory.txt
+#     - destroy-environment
 #       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
@@ -390,4 +390,6 @@ workflows:
       - scan-backend:
           requires: [build-backend]
       - scan-frontend:
-          requires: [build-frontend]    
+          requires: [build-frontend]  
+      - deploy-infrastructure:
+          requires: [test-backend, scan-frontend, scan-backend]      
