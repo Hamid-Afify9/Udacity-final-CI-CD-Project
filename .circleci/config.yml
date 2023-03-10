@@ -32,6 +32,7 @@ commands:
           when: on_fail
           command: |
             
+            aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
 
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
 
@@ -208,7 +209,7 @@ jobs:
       - install_awscli
       - install_ansible   
       - add_ssh_keys:
-          fingerprints: ["71:1a:a4:0a:b5:d1:b9:8a:e3:09:fb:be:36:b3:9d:91"]
+          fingerprints: ["06:ba:4f:28:f1:d2:b9:0c:79:cf:cb:c1:2b:61:16:d6"]
       - attach_workspace:
           at: ~/
       - run:
@@ -392,7 +393,9 @@ workflows:
       - scan-frontend:
           requires: [build-frontend]  
       - deploy-infrastructure:
-          requires: [test-backend, scan-frontend, scan-backend]      
+          requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
           filters:
             branches:
               only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]        
