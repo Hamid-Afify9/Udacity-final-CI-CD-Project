@@ -168,7 +168,7 @@ jobs:
     steps:
       - checkout
       - install_awscli
-     #- install_ansible
+      - install_ansible
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -398,4 +398,6 @@ workflows:
             branches:
               only: [master]
       - configure-infrastructure:
-          requires: [deploy-infrastructure]        
+          requires: [deploy-infrastructure]  
+      - run-migrations:
+          requires: [configure-infrastructure]          
