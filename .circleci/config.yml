@@ -227,14 +227,13 @@ jobs:
     steps:
       - checkout
       - install_awscli
-      - install_ansible
+#     - install_ansible
       - run:
           name: Run migrations
           command: |
             cd backend
+            npm cache clean --force
             npm install
-            npm audit fix 
-            npm audit fix --force
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
