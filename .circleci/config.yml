@@ -38,16 +38,16 @@ commands:
 
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
   install_nodejs:
-    description: Install Node.js 13.8.0
+    description: Install Node.js 13
     steps:
       - run:
-          name: Install Node.js 13.8.0
+          name: Install Node.js 13
           command: |
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt install -y nodejs
 
-            sudo npm install --global n
-            sudo n 13.8.0
+ #           sudo npm install --global n
+ #           sudo n 13.8.0
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
@@ -399,4 +399,8 @@ workflows:
       - configure-infrastructure:
           requires: [deploy-infrastructure]  
       - run-migrations:
-          requires: [configure-infrastructure]          
+          requires: [configure-infrastructure]   
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]           
