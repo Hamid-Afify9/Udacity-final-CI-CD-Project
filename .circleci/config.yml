@@ -320,44 +320,44 @@ jobs:
       - revert-migrations
 #       # Here's where you will add some code to rollback on failure  
 
-    smoke-test:
-      docker:
+  smoke-test:
+    docker:
         - image: python:3.7-alpine3.11
-      steps:
-        - checkout
-        - attach_workspace:
+    steps:
+      - checkout
+      - attach_workspace:
             at: ~/
-        - run:
-            name: Install dependencies
-            command: |
-              apk add --update curl
-              pip install awscli
-        - run:
-            name: Backend smoke test
-            command: |
-              BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-              API_URL="http://${BACKEND_IP}:3030"
-              echo "${API_URL}"
-              curl "${API_URL}/api/status"
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update curl
+            pip install awscli
+      - run:
+          name: Backend smoke test
+          command: |
+            BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            curl "${API_URL}/api/status"
               
-        - run:
-            name: Install dependencies
-            command: |
-              apk add --update curl
-              pip install awscli
-        - run:
-            name: Smoke test for front end
-            command: |
-              URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com/#/employees"            
-              echo ${URL} 
-              if curl -s ${URL} | grep "Welcome"
-              then
-                exit 0
-              else
-                exit 1
-              fi           
-        - destroy-environment  
-        - revert-migrations
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update curl
+            pip install awscli
+      - run:
+          name: Smoke test for front end
+          command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+              exit 0
+            else
+              exit 1
+            fi           
+      - destroy-environment  
+      - revert-migrations
 
 #   cloudfront-update:
 #     docker:
