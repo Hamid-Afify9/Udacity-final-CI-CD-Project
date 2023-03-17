@@ -1,0 +1,2 @@
+[github_repo]: https://github.com/Hamid-Afify9/cdond-c3-projectstarter
+[s3_bucket_ul]: https://udapeople-7bd6044.s3.amazonaws.com/index.html#/employees
