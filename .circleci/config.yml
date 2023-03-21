@@ -156,11 +156,11 @@ jobs:
       - run:
           name: Back-end scan
           command: |
-             cd backend
-             npm install
-             npm audit fix --force --audit-level=critical
-             npm audit fix --force --audit-level=critical
-             npm audit --audit-level=critical
+            cd backend
+            npm install
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
+            npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
@@ -364,11 +364,11 @@ jobs:
         - run:
             name: Save Old Workflow ID to kvdb.io
             command: |
-              export OLD_WORKFLOW_ID=$(aws cloudformation \
+              export OLD_WORKFLOW_ID1=$(aws cloudformation \
                         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                         --no-paginate --output text)
-              echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
-              curl -k https://kvdb.io/${KVDB_BUCKET}/old_workflow_id -d "${OLD_WORKFLOW_ID}"
+              echo "Old Wokflow ID: $OLD_WORKFLOW_ID1"
+              curl -k https://kvdb.io/${KVDB_BUCKET}/old_workflow_id1 -d "${OLD_WORKFLOW_ID1}"
         - run:
             name: Update cloudfront distribution
             command: |
@@ -397,7 +397,7 @@ jobs:
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/LcpvyP15AWBTYqiKtxueAj/old_workflow5_id)
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id1)
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
@@ -410,32 +410,33 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]  
-      # - deploy-infrastructure:
-      #     requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
-      #     filters:
-      #       branches:
-      #         only: [master]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]  
-      # - run-migrations:
-      #     requires: [configure-infrastructure]   
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]  
-      # - cloudfront-update:
-      #     requires: [smoke-test]    
-      - cleanup
-      #    requires: [cloudfront-update]                  
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]  
+      - deploy-infrastructure:
+          requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
+          filters:
+            branches:
+              only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]  
+      - run-migrations:
+          requires: [configure-infrastructure]   
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]  
+      - cloudfront-update:
+          requires: [smoke-test]    
+      - cleanup:
+          requires: [cloudfront-update]
+                        
