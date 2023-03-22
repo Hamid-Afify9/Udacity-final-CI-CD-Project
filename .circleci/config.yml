@@ -401,42 +401,45 @@ jobs:
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
+              echo : "CORRECT! removing old environment"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-            fi   
+            else
+                echo : "ERROR! removing old environment"
+            fi    
 
 
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]  
-      - deploy-infrastructure:
-          requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
-          filters:
-            branches:
-              only: [master]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]  
-      - run-migrations:
-          requires: [configure-infrastructure]   
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]  
-      - cloudfront-update:
-          requires: [smoke-test]    
-      - cleanup:
-          requires: [cloudfront-update]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]  
+      # - deploy-infrastructure:
+      #     requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
+      #     filters:
+      #       branches:
+      #         only: [master]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]  
+      # - run-migrations:
+      #     requires: [configure-infrastructure]   
+      # - deploy-frontend:
+      #     requires: [run-migrations]
+      # - deploy-backend:
+      #     requires: [run-migrations]
+      # - smoke-test:
+      #     requires: [deploy-backend, deploy-frontend]  
+      # - cloudfront-update:
+      #     requires: [smoke-test]    
+      - cleanup
+      #    requires: [cloudfront-update]
                         
