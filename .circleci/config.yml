@@ -434,7 +434,7 @@ workflows:
       #         only: [master]
       # - configure-infrastructure:
       #     requires: [deploy-infrastructure]  
-      # - run-migrations:
+        - run-migrations
       #     requires: [configure-infrastructure]   
       # - deploy-frontend:
       #     requires: [run-migrations]
@@ -444,6 +444,6 @@ workflows:
       #     requires: [deploy-backend, deploy-frontend]  
       # - cloudfront-update:
       #     requires: [smoke-test]    
-      - cleanup
-      #    requires: [cloudfront-update]
+      # - cleanup:
+      #   requires: [cloudfront-update]
                         
