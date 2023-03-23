@@ -1,6 +1,6 @@
-export NODE_ENV=Production
+export NODE_ENV=local
 export VERSION=1
-export EXPORTTYPEORM_CONNECTION=postgres
+export TYPEORM_CONNECTION=postgres
 export TYPEORM_MIGRATIONS_DIR=./migrations
 export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
 export TYPEORM_MIGRATIONS=./migrations/*{.ts,.js}
