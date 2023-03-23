@@ -233,8 +233,8 @@ jobs:
             cd backend
             # npm cache clean --force
             npm install
-            # npm audit fix --force --audit-level=critical
-            npm run premigrations
+            npm audit fix --force --audit-level=critical
+            # npm run premigrations
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run: 
