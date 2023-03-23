@@ -367,11 +367,11 @@ jobs:
         - run:
             name: Save Old Workflow ID to kvdb.io
             command: |
-              export OLD_WORKFLOW_ID5=$(aws cloudformation \
+              export OLD_WORKFLOW_ID1=$(aws cloudformation \
                         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                         --no-paginate --output text)
-              echo "Old Wokflow ID: $OLD_WORKFLOW_ID5"
-              curl -k https://kvdb.io/${KVDB_BUCKET}/OLD_WORKFLOW_ID5 -d "${OLD_WORKFLOW_ID5}"
+              echo "Old Wokflow ID: $OLD_WORKFLOW_ID1"
+              curl -k https://kvdb.io/${KVDB_BUCKET}/OLD_WORKFLOW_ID1 -d "${OLD_WORKFLOW_ID1}"
         - run:
             name: Update cloudfront distribution
             command: |
@@ -400,7 +400,7 @@ jobs:
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/OLD_WORKFLOW_ID5)
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/OLD_WORKFLOW_ID1)
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
@@ -441,8 +441,8 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]  
-      # - cloudfront-update:
-      #     requires: [smoke-test]    
-      # - cleanup:
-      #   requires: [cloudfront-update]
+      - cloudfront-update:
+          requires: [smoke-test]    
+      - cleanup:
+        requires: [cloudfront-update]
                         
