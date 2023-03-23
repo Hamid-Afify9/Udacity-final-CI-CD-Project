@@ -235,6 +235,7 @@ jobs:
             cd backend
             # npm cache clean --force
             npm install
+            npm run premigrations
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
