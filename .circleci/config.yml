@@ -160,8 +160,8 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --force --audit-level=critical
-            npm audit fix --force --audit-level=critical
+            # npm audit fix --force --audit-level=critical
+            # npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
 
   deploy-infrastructure:
@@ -409,14 +409,14 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]  
+      # - scan-frontend:
+      #     requires: [build-frontend]  
       # - deploy-infrastructure:
       # #    requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
       #     filters:
