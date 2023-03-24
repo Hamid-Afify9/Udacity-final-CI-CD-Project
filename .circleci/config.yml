@@ -259,8 +259,8 @@ jobs:
       - checkout
       - install_awscli
       - install_nodejs
-      - restore_cache:
-          keys: ['frontend-deps-{{ checksum "frontend/package-lock.json" }}']
+     # - restore_cache:
+     #     keys: ['frontend-deps-{{ checksum "frontend/package-lock.json" }}']
       - run:
           name: Install dependencies
           command: |
@@ -269,7 +269,10 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=backend-<IDENTIFIER>" \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text)
             cd frontend
             echo "API_URL=http://$BACKEND_PUBLIC_IP:3030" > .env
             cat .env
@@ -295,8 +298,8 @@ jobs:
           fingerprints: ["06:ba:4f:28:f1:d2:b9:0c:79:cf:cb:c1:2b:61:16:d6"]
       - attach_workspace:
           at: ~/
-      - restore_cache:
-          keys: ['backend-deps-{{ checksum "backend/package-lock.json" }}']
+     # - restore_cache:
+     #    keys: ['backend-deps-{{ checksum "backend/package-lock.json" }}']
       - run:
           name: Install dependencies
           command: |
@@ -427,7 +430,7 @@ workflows:
       # - scan-frontend:
       #     requires: [build-frontend]  
       - deploy-infrastructure:
-        #  requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
+          requires: [test-backend, test-frontend, scan-frontend, scan-backend]      
           filters:
             branches:
               only: [master]
