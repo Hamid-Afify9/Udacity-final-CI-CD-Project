@@ -274,7 +274,6 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text)
             echo "API_URL=http://${BACKEND_PUBLIC_IP}:3030" > frontend/.env
-            echo "API_URL=http://${BACKEND_PUBLIC_IP}:3030"
             cat frontend/.env
       - run:
           name: Deploy frontend objects
